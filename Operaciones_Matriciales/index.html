@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformaciones Matriciales en Imagen</title>
+    <style>
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        canvas {
+            border: 1px solid black;
+            margin: 0 20px;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls input, .controls select {
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .controls label {
+            font-size: 18px;
+        }
+
+        input[type="range"] {
+            width: 300px; /* Hacer los sliders más largos */
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align:center;">Transformaciones Matriciales en Imagen</h1>
+
+<div class="canvas-container">
+    <canvas id="original"></canvas>
+    <canvas id="canvas"></canvas>
+</div>
+
+<div class="controls">
+    <label>Operación:
+        <select id="operation">
+            <option value="translate">Traslación</option>
+            <option value="rotate">Rotación</option>
+            <option value="scale">Escalamiento</option>
+            <option value="shear">Sizayado</option>
+        </select>
+    </label><br>
+
+    <div id="translate-controls" class="operation-controls">
+        <label>Traslación X: <input type="range" id="translateX" min="-200" max="200" value="0"></label><br>
+        <label>Traslación Y: <input type="range" id="translateY" min="-200" max="200" value="0"></label>
+    </div>
+
+    <div id="rotate-controls" class="operation-controls" style="display:none;">
+        <label>Rotación: <input type="range" id="rotate" min="0" max="360" value="0"></label>
+    </div>
+
+    <div id="scale-controls" class="operation-controls" style="display:none;">
+        <label>Escalamiento: <input type="range" id="scale" min="0.1" max="2" step="0.1" value="1"></label>
+    </div>
+
+    <div id="shear-controls" class="operation-controls" style="display:none;">
+        <label>Sizayado X: <input type="range" id="shearX" min="-1" max="1" step="0.1" value="0"></label><br>
+        <label>Sizayado Y: <input type="range" id="shearY" min="-1" max="1" step="0.1" value="0"></label>
+    </div>
+</div>
+
+<script>
+    const originalCanvas = document.getElementById('original');
+    const resultCanvas = document.getElementById('canvas');
+    const originalCtx = originalCanvas.getContext('2d');
+    const resultCtx = resultCanvas.getContext('2d');
+    const image = new Image();
+    image.src = 'dr_stone1.png';
+
+    image.onload = () => {
+        originalCanvas.width = image.width;
+        originalCanvas.height = image.height;
+        resultCanvas.width = image.width;
+        resultCanvas.height = image.height;
+        originalCtx.drawImage(image, 0, 0, image.width, image.height);
+        drawImage();
+    };
+
+    // Mostrar controles según la operación seleccionada
+    document.getElementById('operation').addEventListener('change', function() {
+        document.querySelectorAll('.operation-controls').forEach(div => div.style.display = 'none');
+        document.getElementById(this.value + '-controls').style.display = 'block';
+        drawImage(); // Actualizar la imagen transformada
+    });
+
+    // Función principal para dibujar la imagen transformada
+    function drawImage() {
+        const operation = document.getElementById('operation').value;
+        resultCtx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+        resultCtx.save(); // Guardamos el estado del contexto
+
+
+        switch(operation) {
+            case 'translate':
+                const translateX = parseInt(document.getElementById('translateX').value);
+                const translateY = parseInt(document.getElementById('translateY').value);
+                resultCtx.translate(translateX, translateY);
+                break;
+
+            case 'rotate':
+                const rotate = parseInt(document.getElementById('rotate').value);
+                resultCtx.translate(resultCanvas.width / 2, resultCanvas.height / 2);
+                resultCtx.rotate(rotate * Math.PI / 180);
+                resultCtx.translate(-resultCanvas.width / 2, -resultCanvas.height / 2);
+                break;
+
+            case 'scale':
+                const scale = parseFloat(document.getElementById('scale').value);
+                resultCtx.translate(resultCanvas.width / 2, resultCanvas.height / 2);
+                resultCtx.scale(scale, scale);
+                resultCtx.translate(-resultCanvas.width / 2, -resultCanvas.height / 2);
+                break;
+
+            case 'shear':
+                const shearX = parseFloat(document.getElementById('shearX').value);
+                const shearY = parseFloat(document.getElementById('shearY').value);
+                resultCtx.transform(1, shearY, shearX, 1, 0, 0);
+                break;
+        }
+
+        resultCtx.drawImage(image, 0, 0, image.width, image.height);
+        resultCtx.restore(); // Restauramos el estado del contexto
+    }
+
+    // Actualizar la imagen cuando los controles cambian
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', drawImage);
+    });
+</script>
+
+</body>
+</html>
