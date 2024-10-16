@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Interés Compuesto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Interés Compuesto</h1>
+        <form id="interestForm">
+            <label for="capital">Capital inicial (P):</label>
+            <input type="number" id="capital" required>
+            
+            <label for="rate">Tasa de interés (%) (r):</label>
+            <input type="number" id="rate" step="0.01" required>
+            
+            <label for="time">Tiempo en años (t):</label>
+            <input type="number" id="time" required>
+            
+            <label for="compounds">Número de periodos por año (n):</label>
+            <input type="number" id="compounds" required>
+
+            <button type="button" onclick="calculateInterest()">Calcular</button>
+        </form>
+        
+        <h2>Resultado</h2>
+        <p id="result"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
