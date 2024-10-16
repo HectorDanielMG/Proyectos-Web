@@ -1,0 +1,47 @@
+ 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Unidades</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor de Unidades</h1>
+
+        <!-- Sección de conversión de temperatura -->
+        <section>
+            <h2>Conversión de Temperatura</h2>
+            <form id="temperatureForm">
+                <label for="tempValue">Valor de la temperatura:</label>
+                <input type="number" id="tempValue" required>
+                
+                <label for="tempUnit">Convertir de:</label>
+                <select id="tempUnit">
+                    <option value="celsius">Celsius</option>
+                    <option value="fahrenheit">Fahrenheit</option>
+                </select>
+
+                <button type="button" onclick="convertTemperature()">Convertir</button>
+            </form>
+            <p id="tempResult"></p>
+        </section>
+
+        <!-- Sección de conversión de moneda -->
+        <section>
+            <h2>Conversión de Moneda</h2>
+            <form id="currencyForm">
+                <label for="amount">Monto en USD:</label>
+                <input type="number" id="amount" required>
+                
+                <button type="button" onclick="convertCurrency()">Convertir a MXN</button>
+            </form>
+            <p id="currencyResult"></p>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
